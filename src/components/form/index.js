@@ -3,12 +3,15 @@ import Input from "../input";
 import Select from "../select";
 import "./Form.css";
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 const Formulario = (props) => {
   const [nome, setNome] = useState('');
   const [cargo, setCargo] = useState('')
   const [imagem, setImagem] = useState('')
   const [time, setTime] = useState('')
+  const [novoTime, setNovoTime] = useState('')
+  const [novaCor, setNovaCor] = useState('')
 
   const aoEnviar = (evento) => {
     evento.preventDefault();
@@ -16,14 +19,28 @@ const Formulario = (props) => {
         nome,
         cargo,
         imagem,
-        time
+        time,
+        id: uuidv4(),
+        favorito: false
     })
 
     setNome('')
     setCargo('')
     setImagem('')
     setTime('')
-  };
+  }
+
+  const aoNovoTime = (evento) => {
+    evento.preventDefault();
+    props.aoNovoTimeAdicionado({
+        nome: novoTime,
+        cor: novaCor,
+        id: uuidv4()
+    })
+
+    setNovoTime('')
+    setNovaCor('')
+  }
 
   return (
     <section>
@@ -53,6 +70,24 @@ const Formulario = (props) => {
             times={props.times}
             value={time}
             aoAlterado={evento => setTime(evento)}
+        />
+        <Botao texto={"Criar card"} />
+      </form>
+      <form onSubmit={aoNovoTime}>
+        <legend>Preencha os dados para criar um novo time</legend>
+        <Input
+            obrigatorio
+            label="Nome"
+            placeholder="Digite o nome do time"
+            value={novoTime}
+            aoAlterado={evento => setNovoTime(evento)}
+        />
+        <Input
+            obrigatorio
+            label="Cor"
+            placeholder="Digite a cor do time"
+            value={novaCor}
+            aoAlterado={evento => setNovaCor(evento)}
         />
         <Botao texto={"Criar card"} />
       </form>
